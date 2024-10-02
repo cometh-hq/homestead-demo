@@ -8,7 +8,7 @@ steps:
       dockerfile: Dockerfile
       registry: gcr.io/cometh-core
       repo: ${DRONE_REPO_NAME}
-      cache_from: gcr.io/cometh-core/${DRONE_REPO_NAME}:develop
+      cache_from: gcr.io/cometh-core/${DRONE_REPO_NAME}:main
       tags:
         - develop
       json_key:
@@ -43,7 +43,7 @@ steps:
 trigger:
   branch:
     include:
-      - develop
+      - main
   event:
     include:
       - push
