@@ -13,6 +13,10 @@ steps:
         - develop
       json_key:
         from_secret: core_google_credentials
+      build_args_from_env:
+        - REACT_APP_WALLETCONNECT_PROJECT_ID
+    environment:
+      REACT_APP_WALLETCONNECT_PROJECT_ID: ""
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
     environment:
@@ -31,10 +35,10 @@ steps:
       username: drone
       message: >
         {{#success build.status}}
-          build push and rolling update for prod {{repo.name}} succeeded. 
+          build push and rolling update for develop {{repo.name}} succeeded. 
           {{build.link}}
         {{else}}
-           build push and rolling update for prod {{repo.name}} failed. Fix me please.
+           build push and rolling update for develop {{repo.name}} failed. Fix me please.
           {{build.link}}
         {{/success}}
     when:
