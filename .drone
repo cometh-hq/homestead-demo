@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: develop release
+name: prod release
 steps:
   - name: build and push
     image: plugins/gcr
@@ -8,18 +8,22 @@ steps:
       dockerfile: Dockerfile
       registry: gcr.io/cometh-core
       repo: ${DRONE_REPO_NAME}
-      cache_from: gcr.io/cometh-core/${DRONE_REPO_NAME}:develop
+      cache_from: gcr.io/cometh-core/${DRONE_REPO_NAME}:prod
       tags:
-        - develop
+        - prod
       json_key:
         from_secret: core_google_credentials
+      build_args_from_env:
+        - REACT_APP_WALLETCONNECT_PROJECT_ID
+    environment:
+      REACT_APP_WALLETCONNECT_PROJECT_ID: ""
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
     environment:
       GCP_SA:
         from_secret: core_google_credentials
       SERVICE: ${DRONE_REPO_NAME}
-      ENVIRONMENT: develop
+      ENVIRONMENT: prod
     depends_on: [build and push]
   - name: discord notification
     image: appleboy/drone-discord
@@ -43,7 +47,7 @@ steps:
 trigger:
   branch:
     include:
-      - develop
+      - main
   event:
     include:
       - push
