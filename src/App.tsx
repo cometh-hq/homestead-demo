@@ -12,7 +12,7 @@ function App() {
     >
       <ConnectKitButton />
       <a
-        href="https://github.com"
+        href="https://github.com/cometh-hq/connectkit-demo"
         style={{
           position: "absolute",
           bottom: 16,
