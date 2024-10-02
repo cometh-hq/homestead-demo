@@ -1,65 +1,37 @@
-# Install dependencies only when needed
-FROM node:18-alpine AS deps
+# Use a Node.js base image
+FROM node:18-alpine AS builder
 
-# Install Python and other necessary dependencies
-RUN apk update && apk add --no-cache \
-    python3 \
-    py3-pip \
-    build-base \
-    linux-headers \
-    eudev-dev \
-    && ln -sf python3 /usr/bin/python
+# Install Python and other dependencies required for node-gyp
+RUN apk update && apk add --no-cache python3 make g++ && ln -sf python3 /usr/bin/python
 
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+# Set the working directory
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
+# Copy dependency files
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+
+# Install dependencies based on the package manager
 RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm install --frozen-lockfile; \
+  else echo "No lockfile found." && exit 1; \
   fi
 
-# Rebuild the source code only when needed
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .  
+# Copy the rest of the application code
+COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-ARG REACT_APP_WALLETCONNECT_PROJECT_ID
-
+# Build the static files for production
 RUN yarn build
 
-# If using npm comment out above and use below instead
-# RUN npm run build
+# Step to serve with nginx
+FROM nginx:alpine AS production
 
-# Production image, copy all the files and run next
-FROM node:18-alpine AS runner
-WORKDIR /app
+# Copy the built files to nginx's default directory
+COPY --from=builder /app/build /usr/share/nginx/html
 
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+# Expose the port where the application will run
+EXPOSE 80
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-
-CMD ["node", "server.js"]
+# Command to start nginx (default in nginx image)
+CMD ["nginx", "-g", "daemon off;"]
