@@ -1122,12 +1122,12 @@
     preact "^10.16.0"
     sha.js "^2.4.11"
 
-"@cometh/homestead@1.8.2-homestead.1":
-  version "1.8.2-homestead.1"
-  resolved "https://registry.yarnpkg.com/@cometh/homestead/-/homestead-1.8.2-homestead.1.tgz#df14e8a3817a8e60a4cec5e1ca0689495fe1d8bb"
-  integrity sha512-JVDlSEJpiTecx7G4PVvVf+31v4zfHd8nuAH25Usv0B4VusIrXq5RtHwsyA1F+BzYiDLaiTtWeiTbEcha1n0pxQ==
+"@cometh/homestead@1.8.2-homestead.2":
+  version "1.8.2-homestead.2"
+  resolved "https://registry.yarnpkg.com/@cometh/homestead/-/homestead-1.8.2-homestead.2.tgz#db394153db4c2812624e5c064f22602bc3bf09e9"
+  integrity sha512-51eJerua/qsAK2A1phjZ1RWU/qGHVRIPq3hc+ITa/MpYPzGNkhQG3ib4O6qglpR2Qeoco1XnhLoxjYUOiB5MAQ==
   dependencies:
-    "@cometh/hosted-sdk" "0.2.0"
+    "@cometh/hosted-sdk" "0.3.0"
     buffer "^6.0.3"
     detect-browser "^5.3.0"
     framer-motion "^6.3.11"
@@ -1137,10 +1137,10 @@
     resize-observer-polyfill "^1.5.1"
     styled-components "^5.3.5"
 
-"@cometh/hosted-sdk@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@cometh/hosted-sdk/-/hosted-sdk-0.2.0.tgz#90765308591d76a8708dd182b06c947f59c3a04b"
-  integrity sha512-YcSXdC4AldCv7IRFuSmwUU4jkNSO3RV8As/2Agx4cueLGqNc31xsTV5rHbiO64BNDFePgnjz1yin/CIpEpMNIw==
+"@cometh/hosted-sdk@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@cometh/hosted-sdk/-/hosted-sdk-0.3.0.tgz#fd9ce0709e09e8156be166e3314b5338fa9a44d9"
+  integrity sha512-WW6/N2UA6tXMIMa4DfBZhMRSv7ahMSdnaF78K9hNSA9N3u41JO/g2gNoS4d3ONe4Mwf9OQ+MRTUonStkCBJrDw==
   dependencies:
     viem "2.x"
     wagmi "2.x"

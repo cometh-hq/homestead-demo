@@ -1,4 +1,5 @@
 import { ConnectKitButton } from "@cometh/homestead";
+import { WalletActions } from "./components/WalletActions";
 
 function App() {
   return (
@@ -7,14 +8,23 @@ function App() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: "100vh",
+        minHeight: "100vh",
+        flexDirection: "column",
+        padding: "0 30px",
       }}
     >
-      <ConnectKitButton />
+      <div
+        style={{
+          marginTop: 30,
+        }}
+      >
+        <ConnectKitButton />
+      </div>
+      <WalletActions />
       <a
         href="https://github.com/cometh-hq/homestead-demo"
         style={{
-          position: "absolute",
+          position: "fixed",
           bottom: 16,
           right: 16,
           cursor: "pointer",
